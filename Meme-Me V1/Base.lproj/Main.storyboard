@@ -26,12 +26,12 @@
                                     <barButtonItem title="Album" id="oPP-dP-3Q1"/>
                                 </items>
                             </toolbar>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="TOP" textAlignment="center" minimumFontSize="11" translatesAutoresizingMaskIntoConstraints="NO" id="Vdb-oA-mfj" userLabel="TopTextField">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="11" translatesAutoresizingMaskIntoConstraints="NO" id="Vdb-oA-mfj" userLabel="TopTextField">
                                 <rect key="frame" x="20" y="72" width="560" height="28"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="23"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="BOTTOM" textAlignment="center" minimumFontSize="11" translatesAutoresizingMaskIntoConstraints="NO" id="DUA-Yj-MbE" userLabel="BottomTextField">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="11" translatesAutoresizingMaskIntoConstraints="NO" id="DUA-Yj-MbE" userLabel="BottomTextField">
                                 <rect key="frame" x="20" y="520" width="560" height="28"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="23"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -62,6 +62,15 @@
                         <barButtonItem key="leftBarButtonItem" systemItem="action" id="wrG-lt-8eh"/>
                         <barButtonItem key="rightBarButtonItem" systemItem="cancel" id="jkf-JF-1HE"/>
                     </navigationItem>
+                    <connections>
+                        <outlet property="bottomTextField" destination="DUA-Yj-MbE" id="AXr-3i-fF0"/>
+                        <outlet property="cameraOutlet" destination="q4L-tO-qSS" id="xsU-hO-b8E"/>
+                        <outlet property="cancelButtonOutlet" destination="jkf-JF-1HE" id="E0R-jU-RsT"/>
+                        <outlet property="chooseFromAlbumOutlet" destination="oPP-dP-3Q1" id="U1k-Bd-doy"/>
+                        <outlet property="imageViewOutlet" destination="ODD-if-vuu" id="Hdo-y1-iB3"/>
+                        <outlet property="shareButtonOutlet" destination="wrG-lt-8eh" id="tfy-AS-NAD"/>
+                        <outlet property="topTextField" destination="Vdb-oA-mfj" id="csn-dT-Wq2"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
