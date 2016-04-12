@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A17A6791CBD861F0064E535 /* Meme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A17A6781CBD861F0064E535 /* Meme.swift */; };
 		3AC4378A1CBCF62B00C43152 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC437891CBCF62B00C43152 /* AppDelegate.swift */; };
 		3AC4378C1CBCF62B00C43152 /* PickAndEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC4378B1CBCF62B00C43152 /* PickAndEditViewController.swift */; };
 		3AC4378F1CBCF62B00C43152 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3AC4378D1CBCF62B00C43152 /* Main.storyboard */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3A17A6781CBD861F0064E535 /* Meme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Meme.swift; sourceTree = "<group>"; };
 		3AC437861CBCF62B00C43152 /* Meme-Me V1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Meme-Me V1.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AC437891CBCF62B00C43152 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3AC4378B1CBCF62B00C43152 /* PickAndEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickAndEditViewController.swift; sourceTree = "<group>"; };
@@ -56,6 +58,7 @@
 			children = (
 				3AC437891CBCF62B00C43152 /* AppDelegate.swift */,
 				3AC4378B1CBCF62B00C43152 /* PickAndEditViewController.swift */,
+				3A17A6781CBD861F0064E535 /* Meme.swift */,
 				3AC4378D1CBCF62B00C43152 /* Main.storyboard */,
 				3AC437901CBCF62B00C43152 /* Assets.xcassets */,
 				3AC437921CBCF62B00C43152 /* LaunchScreen.storyboard */,
@@ -135,6 +138,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A17A6791CBD861F0064E535 /* Meme.swift in Sources */,
 				3AC4378C1CBCF62B00C43152 /* PickAndEditViewController.swift in Sources */,
 				3AC4378A1CBCF62B00C43152 /* AppDelegate.swift in Sources */,
 			);
@@ -288,6 +292,7 @@
 				3AC4379A1CBCF62B00C43152 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

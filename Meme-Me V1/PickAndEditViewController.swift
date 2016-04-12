@@ -21,13 +21,14 @@ class PickAndEditViewController: UIViewController {
   @IBOutlet weak var bottomTextField: UITextField!
   @IBOutlet weak var imageViewOutlet: UIImageView!
   
-  let textFieldAttributes = [NSForegroundColorAttributeName : UIColor.whiteColor(), NSFontAttributeName : UIFont(name: "HelveticaNeue-CondensedBlack", size: 40.0)!, NSStrokeWidthAttributeName : 3.0, NSStrokeColorAttributeName : UIColor.blackColor()]
+  let textFieldAttributes = [NSForegroundColorAttributeName : UIColor.whiteColor(), NSFontAttributeName : UIFont(name: "HelveticaNeue-CondensedBlack", size: 40.0)!, NSStrokeWidthAttributeName : -3.0, NSStrokeColorAttributeName : UIColor.blackColor()]
   
   
   override func viewDidLoad() {
     super.viewDidLoad()
     
     congifureTextFields()
+    cameraOutlet.enabled = UIImagePickerController.isSourceTypeAvailable(.Camera)
   }
   
   override func viewDidAppear(animated: Bool) {
@@ -42,6 +43,10 @@ class PickAndEditViewController: UIViewController {
 
 
 
+
+
+
+
 extension PickAndEditViewController: UITextFieldDelegate {
   
   // MARK: textField and keyboard configuration
@@ -50,12 +55,12 @@ extension PickAndEditViewController: UITextFieldDelegate {
     
     topTextField.delegate = self
     topTextField.defaultTextAttributes = textFieldAttributes
-    let topText = NSAttributedString(string: "Top", attributes: textFieldAttributes)
+    let topText = NSAttributedString(string: "TOP", attributes: textFieldAttributes)
     topTextField.attributedPlaceholder = topText
     topTextField.textAlignment = .Center
     
     bottomTextField.delegate = self
-    let bottomText = NSAttributedString(string: "Bottom", attributes: textFieldAttributes)
+    let bottomText = NSAttributedString(string: "BOTTOM", attributes: textFieldAttributes)
     bottomTextField.attributedPlaceholder = bottomText
     bottomTextField.defaultTextAttributes = textFieldAttributes
     bottomTextField.textAlignment = .Center
@@ -88,6 +93,7 @@ extension PickAndEditViewController: UITextFieldDelegate {
   
   func unsubscribeToNotifications() {
     NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+    NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
   }
   
   func keyboardWillShow(notification: NSNotification) {
@@ -107,6 +113,47 @@ extension PickAndEditViewController: UITextFieldDelegate {
     let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue
     return keyboardSize.CGRectValue().height
   }
+  
+}
+
+
+
+
+
+extension PickAndEditViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+  
+  // MARK: Pick an Image
+
+  @IBAction func takeAPicture(sender: AnyObject) {
+    
+    let imagePicker = UIImagePickerController()
+    imagePicker.delegate = self
+    imagePicker.sourceType = .Camera
+    presentViewController(imagePicker, animated: true, completion: nil)
+    
+  }
+  
+  
+  @IBAction func chooseImageFromAlbum(sender: AnyObject) {
+    
+    let imagePicker = UIImagePickerController()
+    imagePicker.delegate = self
+    imagePicker.sourceType = .SavedPhotosAlbum
+    presentViewController(imagePicker, animated: true, completion: nil)
+
+  }
+  
+  func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    
+    dismissViewControllerAnimated(true, completion: nil)
+
+    if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+    imageViewOutlet.image = image 
+    
+    }
+    
+  }
+  
   
 }
 
