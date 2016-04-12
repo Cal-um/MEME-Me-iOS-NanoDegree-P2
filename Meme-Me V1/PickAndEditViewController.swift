@@ -21,14 +21,21 @@ class PickAndEditViewController: UIViewController {
   @IBOutlet weak var bottomTextField: UITextField!
   @IBOutlet weak var imageViewOutlet: UIImageView!
   
-  let textFieldAttributes = [NSForegroundColorAttributeName : UIColor.whiteColor(), NSFontAttributeName : UIFont(name: "HelveticaNeue-CondensedBlack", size: 27.0)!, NSStrokeWidthAttributeName : 3.0, NSStrokeColorAttributeName : UIColor.blackColor()]
+  let textFieldAttributes = [NSForegroundColorAttributeName : UIColor.whiteColor(), NSFontAttributeName : UIFont(name: "HelveticaNeue-CondensedBlack", size: 40.0)!, NSStrokeWidthAttributeName : 3.0, NSStrokeColorAttributeName : UIColor.blackColor()]
   
   
   override func viewDidLoad() {
     super.viewDidLoad()
     
     congifureTextFields()
-
+  }
+  
+  override func viewDidAppear(animated: Bool) {
+   subscribeToKeyboardNotifications()
+  }
+  
+  override func viewDidDisappear(animated: Bool) {
+    unsubscribeToNotifications()  
   }
 
 }
@@ -37,7 +44,7 @@ class PickAndEditViewController: UIViewController {
 
 extension PickAndEditViewController: UITextFieldDelegate {
   
-  // MARK: textField configuration
+  // MARK: textField and keyboard configuration
   
   func congifureTextFields() {
     
@@ -48,15 +55,14 @@ extension PickAndEditViewController: UITextFieldDelegate {
     topTextField.textAlignment = .Center
     
     bottomTextField.delegate = self
-    bottomTextField.textAlignment = .Center
     let bottomText = NSAttributedString(string: "Bottom", attributes: textFieldAttributes)
     bottomTextField.attributedPlaceholder = bottomText
-
-    
     bottomTextField.defaultTextAttributes = textFieldAttributes
     bottomTextField.textAlignment = .Center
     
   }
+  
+  //  remove placeholder when inputing text and return will dismiss keyboard
   
   func textFieldShouldReturn(textField: UITextField) -> Bool {
     topTextField.resignFirstResponder()
@@ -73,6 +79,34 @@ extension PickAndEditViewController: UITextFieldDelegate {
     congifureTextFields()
   }
   
+  // Subscribe to keyboard notifications and move view the height of the keyboard if bottomTextView is first responder.
+  
+  func subscribeToKeyboardNotifications() {
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow), name: UIKeyboardWillShowNotification, object: nil)
+     NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide), name: UIKeyboardWillHideNotification, object: nil)
+  }
+  
+  func unsubscribeToNotifications() {
+    NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+  }
+  
+  func keyboardWillShow(notification: NSNotification) {
+    if bottomTextField.isFirstResponder() {
+    view.frame.origin.y -= getKeyboardHeight(notification)
+    }
+  }
+  
+  func keyboardWillHide(notification: NSNotification) {
+    if bottomTextField.isFirstResponder() {
+    view.frame.origin.y += getKeyboardHeight(notification)
+    }
+  }
+  
+  func getKeyboardHeight(notification: NSNotification) -> CGFloat {
+    let userInfo = notification.userInfo
+    let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue
+    return keyboardSize.CGRectValue().height
+  }
   
 }
 
