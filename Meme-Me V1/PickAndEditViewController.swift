@@ -21,8 +21,14 @@ class PickAndEditViewController: UIViewController {
   @IBOutlet weak var bottomTextField: UITextField!
   @IBOutlet weak var imageViewOutlet: UIImageView!
   
-  let textFieldAttributes = [NSForegroundColorAttributeName : UIColor.whiteColor(), NSFontAttributeName : UIFont(name: "HelveticaNeue-CondensedBlack", size: 40.0)!, NSStrokeWidthAttributeName : -3.0, NSStrokeColorAttributeName : UIColor.blackColor()]
+  @IBOutlet weak var toolBar: UIToolbar!
   
+  // Text attributes for NSAttributedString defaultTextAttributes
+  
+  let textFieldAttributes = [NSForegroundColorAttributeName : UIColor.whiteColor(), NSFontAttributeName : UIFont(name: "HelveticaNeue-CondensedBlack", size: 50.0)!, NSStrokeWidthAttributeName : -3.0, NSStrokeColorAttributeName : UIColor.blackColor()]
+  
+  
+  // View cycles
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -40,6 +46,8 @@ class PickAndEditViewController: UIViewController {
   }
 
 }
+
+
 
 
 
@@ -96,6 +104,8 @@ extension PickAndEditViewController: UITextFieldDelegate {
     NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
   }
   
+  // When notifications sent out these functions will be called
+  
   func keyboardWillShow(notification: NSNotification) {
     if bottomTextField.isFirstResponder() {
     view.frame.origin.y -= getKeyboardHeight(notification)
@@ -107,6 +117,8 @@ extension PickAndEditViewController: UITextFieldDelegate {
     view.frame.origin.y += getKeyboardHeight(notification)
     }
   }
+  
+  // Keyboard height calculation
   
   func getKeyboardHeight(notification: NSNotification) -> CGFloat {
     let userInfo = notification.userInfo
@@ -120,10 +132,16 @@ extension PickAndEditViewController: UITextFieldDelegate {
 
 
 
+
+
 extension PickAndEditViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
   
   // MARK: Pick an Image
 
+  
+  // camera
+  
+  
   @IBAction func takeAPicture(sender: AnyObject) {
     
     let imagePicker = UIImagePickerController()
@@ -134,6 +152,8 @@ extension PickAndEditViewController: UIImagePickerControllerDelegate, UINavigati
   }
   
   
+  // album
+  
   @IBAction func chooseImageFromAlbum(sender: AnyObject) {
     
     let imagePicker = UIImagePickerController()
@@ -143,17 +163,78 @@ extension PickAndEditViewController: UIImagePickerControllerDelegate, UINavigati
 
   }
   
+  
+  // orginal image sent to image outlet
+  
   func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
     
     dismissViewControllerAnimated(true, completion: nil)
 
     if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
     imageViewOutlet.image = image 
-    
+    shareButtonOutlet.enabled = true
     }
+  }
+  
+  // MARK: Save and generate meme image
+  
+  
+  func save() {
+    let meme = Meme( topText: topTextField.text!, bottomText: bottomTextField.text!, originalImage:
+      imageViewOutlet.image!, meMeImage: memedImage())
+  }
+  
+  // screenshot of combined text and image minus navbar and toolbar.
+  
+  func memedImage() -> UIImage {
+    
+    navigationController?.setNavigationBarHidden(true, animated: false)
+    toolBar.hidden = true
+    
+    UIGraphicsBeginImageContext(self.view.frame.size)
+    view.drawViewHierarchyInRect(self.view.frame,
+                                 afterScreenUpdates: true)
+    let memedImage : UIImage =
+      UIGraphicsGetImageFromCurrentImageContext()
+    UIGraphicsEndImageContext()
+    
+    navigationController?.setNavigationBarHidden(false, animated: false)
+    toolBar.hidden = false
+    return memedImage
+
+  }
+  
+  // Action view controller with save and dismiss in completion handler.
+  
+  @IBAction func shareImage(sender: AnyObject) {
+    
+    let actionController = UIActivityViewController(activityItems: [memedImage()], applicationActivities: nil)
+    presentViewController(actionController, animated: true, completion: nil)
+    
+    actionController.completionWithItemsHandler = { activity, success, items, error in
+      
+      if success {
+        print("Success")
+        self.save()
+        self.dismissViewControllerAnimated(true, completion: nil)
+      }
+    }
+  }
+  
+  // cancel button removes all user added content
+  
+  @IBAction func resetToInitalSettings(sender: AnyObject) {
+    
+    shareButtonOutlet.enabled = false
+    topTextField.text = ""
+    bottomTextField.text = ""
+    imageViewOutlet.image = nil
+    
     
   }
   
+  
+
   
 }
 
