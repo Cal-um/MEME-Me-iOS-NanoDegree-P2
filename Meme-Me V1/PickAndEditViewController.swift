@@ -33,7 +33,8 @@ class PickAndEditViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    congifureTextFields()
+    congifureTextFields(topTextField)
+    congifureTextFields(bottomTextField)
     cameraOutlet.enabled = UIImagePickerController.isSourceTypeAvailable(.Camera)
   }
   
@@ -59,20 +60,22 @@ extension PickAndEditViewController: UITextFieldDelegate {
   
   // MARK: textField and keyboard configuration
   
-  func congifureTextFields() {
+  func congifureTextFields(textField: UITextField) {
     
-    topTextField.delegate = self
-    topTextField.defaultTextAttributes = textFieldAttributes
-    let topText = NSAttributedString(string: "TOP", attributes: textFieldAttributes)
-    topTextField.attributedPlaceholder = topText
-    topTextField.textAlignment = .Center
+    var placeholderString = ""
     
-    bottomTextField.delegate = self
-    let bottomText = NSAttributedString(string: "BOTTOM", attributes: textFieldAttributes)
-    bottomTextField.attributedPlaceholder = bottomText
-    bottomTextField.defaultTextAttributes = textFieldAttributes
-    bottomTextField.textAlignment = .Center
+    switch textField {
+    case topTextField: placeholderString = "TOP"
+    case bottomTextField: placeholderString = "BOTTOM"
+    default: print("unacounted for textField")
+    }
     
+    textField.delegate = self
+    textField.defaultTextAttributes = textFieldAttributes
+    let text = NSAttributedString(string: placeholderString, attributes: textFieldAttributes)
+    textField.attributedPlaceholder = text
+    textField.textAlignment = .Center
+  
   }
   
   //  remove placeholder when inputing text and return will dismiss keyboard
@@ -89,7 +92,8 @@ extension PickAndEditViewController: UITextFieldDelegate {
   }
   
   func textFieldDidEndEditing(textField: UITextField) {
-    congifureTextFields()
+    congifureTextFields(topTextField)
+    congifureTextFields(bottomTextField)
   }
   
   // Subscribe to keyboard notifications and move view the height of the keyboard if bottomTextView is first responder.
@@ -143,25 +147,33 @@ extension PickAndEditViewController: UIImagePickerControllerDelegate, UINavigati
   
   
   @IBAction func takeAPicture(sender: AnyObject) {
-    
-    let imagePicker = UIImagePickerController()
-    imagePicker.delegate = self
-    imagePicker.sourceType = .Camera
-    presentViewController(imagePicker, animated: true, completion: nil)
-    
+    imagePicker(sender as! UIBarButtonItem)
   }
   
   
   // album
   
   @IBAction func chooseImageFromAlbum(sender: AnyObject) {
+    imagePicker(sender as! UIBarButtonItem)
+  }
+  
+  
+  // Image Picker function camera/album 
+  
+  func imagePicker(sender: UIBarButtonItem) {
     
     let imagePicker = UIImagePickerController()
     imagePicker.delegate = self
-    imagePicker.sourceType = .SavedPhotosAlbum
+    
+    switch sender {
+    case cameraOutlet: imagePicker.sourceType = .Camera
+    case chooseFromAlbumOutlet: imagePicker.sourceType = .PhotoLibrary
+    default: print("Unkown Button")
+    }
+    
     presentViewController(imagePicker, animated: true, completion: nil)
-
   }
+  
   
   
   // orginal image sent to image outlet
@@ -229,8 +241,6 @@ extension PickAndEditViewController: UIImagePickerControllerDelegate, UINavigati
     topTextField.text = ""
     bottomTextField.text = ""
     imageViewOutlet.image = nil
-    
-    
   }
   
   
