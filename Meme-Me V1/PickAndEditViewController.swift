@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  PickAndEditViewController.swift
 //  Meme-Me V1
 //
 //  Created by Calum Harris on 12/04/2016.
@@ -112,13 +112,13 @@ extension PickAndEditViewController: UITextFieldDelegate {
   
   func keyboardWillShow(notification: NSNotification) {
     if bottomTextField.isFirstResponder() {
-    view.frame.origin.y -= getKeyboardHeight(notification)
+    view.frame.origin.y = getKeyboardHeight(notification) * -1
     }
   }
   
   func keyboardWillHide(notification: NSNotification) {
     if bottomTextField.isFirstResponder() {
-    view.frame.origin.y += getKeyboardHeight(notification)
+    view.frame.origin.y = 0
     }
   }
   
@@ -131,10 +131,6 @@ extension PickAndEditViewController: UITextFieldDelegate {
   }
   
 }
-
-
-
-
 
 
 
@@ -158,7 +154,7 @@ extension PickAndEditViewController: UIImagePickerControllerDelegate, UINavigati
   }
   
   
-  // Image Picker function camera/album 
+  // Image Picker function camera/album
   
   func imagePicker(sender: UIBarButtonItem) {
     
@@ -194,6 +190,10 @@ extension PickAndEditViewController: UIImagePickerControllerDelegate, UINavigati
   func save() {
     let meme = Meme( topText: topTextField.text!, bottomText: bottomTextField.text!, originalImage:
       imageViewOutlet.image!, meMeImage: memedImage())
+    
+    let object = UIApplication.sharedApplication().delegate
+    let appDelegate = object as! AppDelegate
+    appDelegate.memes.append(meme)
   }
   
   // screenshot of combined text and image minus navbar and toolbar.
@@ -235,15 +235,9 @@ extension PickAndEditViewController: UIImagePickerControllerDelegate, UINavigati
   
   // cancel button removes all user added content
   
-  @IBAction func resetToInitalSettings(sender: AnyObject) {
-    
-    shareButtonOutlet.enabled = false
-    topTextField.text = ""
-    bottomTextField.text = ""
-    imageViewOutlet.image = nil
+  @IBAction func cancelButton(sender: AnyObject) {
+    dismissViewControllerAnimated(true, completion: nil)
   }
-  
-  
 
   
 }
