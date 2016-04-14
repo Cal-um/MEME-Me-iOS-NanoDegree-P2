@@ -20,18 +20,23 @@ class MemeGalleryCollectionViewController: UICollectionViewController {
   
   
   override func viewWillAppear(animated: Bool) {
+    collectionView!.reloadData()
     
+
+  }
+  
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
     let spacing: CGFloat = 3
     let dimension = (view.frame.size.width - (2 * spacing)) / 3.0
     
     flowLayout.minimumLineSpacing = spacing
     flowLayout.minimumInteritemSpacing = spacing
     flowLayout.itemSize = CGSizeMake(dimension, dimension)
-    
-    collectionView!.reloadData()
-    
   }
+  
 }
+
 
 
 extension MemeGalleryCollectionViewController {
